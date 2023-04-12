@@ -1,11 +1,6 @@
-const express = require("express");
-const Joi = require("joi");
-
 const contacts = require("../../models/contacts.js");
-
+const Joi = require("joi");
 const { HttpError } = require("../../helpers");
-
-const router = express.Router();
 
 const shema = Joi.object({
   name: Joi.string().min(2).max(20).required(),
@@ -15,16 +10,16 @@ const shema = Joi.object({
     .required()
 });
 
-router.get("/", async (req, res, next) => {
+const getAllContacts = async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.get("/:contactId", async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
@@ -35,9 +30,9 @@ router.get("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post("/", async (req, res, next) => {
+const addContact = async (req, res, next) => {
   try {
     const { error } = shema.validate(req.body);
 
@@ -50,9 +45,9 @@ router.post("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.delete("/:contactId", async (req, res, next) => {
+const removeContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
@@ -65,9 +60,9 @@ router.delete("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.put("/:contactId", async (req, res, next) => {
+const updateContactById = async (req, res, next) => {
   try {
     const { error } = shema.validate(req.body);
 
@@ -83,6 +78,12 @@ router.put("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getAllContacts,
+  getContactById,
+  addContact,
+  removeContactById,
+  updateContactById
+};
