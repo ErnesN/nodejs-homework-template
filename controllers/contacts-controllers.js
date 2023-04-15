@@ -1,4 +1,4 @@
-const contacts = require("../../models/contacts.js");
+const contacts = require("../models/contacts.js");
 
 const { ctrlWrapper } = require("../utils");
 
