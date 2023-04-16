@@ -1,6 +1,9 @@
 const errorMessage = {
-  400: "Missing required name field",
-  404: "Not found"
+  400: "Bad Request",
+  401: "Unauthorized",
+  403: "Forbidden",
+  404: "Not Found",
+  409: "Conflict"
 };
 
 const HttpError = (status, message = errorMessage[status]) => {
