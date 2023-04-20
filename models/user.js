@@ -7,28 +7,25 @@ const emailRegexp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true
-    },
     email: {
       type: String,
       match: emailRegexp,
       unique: true,
-      required: true
+      required: [true, "Email is required!"]
     },
     password: {
       type: String,
       minlenght: 8,
-      required: true
+      required: [true, "Set password for user"]
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true
-    }
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter"
+    },
+    token: String
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: false }
 );
 
 userSchema.post("save", handleMongooseError);

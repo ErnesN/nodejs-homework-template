@@ -6,15 +6,26 @@ const { Contact } = require("../models/contact.js");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt");
+  const { page = 1, limit = 5, favorite = false } = req.query;
+  const skip = (page - 1) * limit;
+  const query = { owner };
+
+  if (favorite) {
+    query.favorite = favorite === "true";
+  }
+
+  const result = await Contact.find(query)
+    .skip(skip)
+    .limit(parseInt(limit))
+    .populate("owner", "email");
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findById(id);
+  const { contactId } = req.params;
+  const result = await Contact.findById(contactId);
   if (!result) {
-    throw HttpError(404, `Contact with ${id} not found`);
+    throw HttpError(404, `Contact with ${contactId} not found`);
   }
   res.json(result);
 };
