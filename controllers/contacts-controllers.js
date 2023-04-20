@@ -5,7 +5,8 @@ const { HttpError } = require("../helpers/index.js");
 const { Contact } = require("../models/contact.js");
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -19,7 +20,8 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

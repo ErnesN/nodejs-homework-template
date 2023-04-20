@@ -21,6 +21,11 @@ const userSchema = new Schema(
       type: String,
       minlenght: 8,
       required: true
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true
     }
   },
   { versionKey: false, timestamps: true }
